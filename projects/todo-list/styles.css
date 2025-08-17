@@ -47,7 +47,12 @@ body {
 }
 
 .add-button:hover {
-    cursor: pointer;
+  cursor: pointer;
+}
+
+li {
+  background-color: #fff;
+  border-radius: 8px;
 }
 
 .center-input-btn {
@@ -58,29 +63,34 @@ body {
 }
 
 @media (max-width: 600px) {
-    .container {
-        width: 98%;
-        max-width: 100%;
-        padding: 0.5rem;
+  .container {
+    width: 98%;
+    max-width: 100%;
+    padding: 0.5rem;
+  }
 
-    }
+  .main-title,
+  .main-content {
+    font-size: 1.3rem;
+  }
 
-    .main-title, .main-content {
-        font-size: 1.3rem;
-    }
+  .center-input-btn, li {
+    flex-direction: column;
+    gap: 0.5rem;
+    margin: 10px 10px 10px 10px;
+  }
 
-    .center-input-btn {
-        flex-direction: column;
-        gap: 0.5rem;
-        margin: 10px 10px 10px 10px;
-    }
+  .add-button,
+  .add-input {
+    width: 100%;
+    font-size: 1rem;
+    padding: 8px;
+    flex: 1;
+  }
 
-    .add-button,
-    .add-input {
-        width: 100%;
-        font-size: 1rem;
-        padding: 8px;
-        flex: 1;
+  li {
+  background-color: #fff;
+  border-radius: 8px;
+  }
 }
 
-}
