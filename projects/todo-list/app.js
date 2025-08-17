@@ -4,7 +4,7 @@ const taskList = document.getElementById("task-list");
 
 //eventlistener for the add-btn
 addBtn.addEventListener("click", () => {
-  taskReceived = input.value.trim();
+  const taskReceived = input.value.trim();
   if (input.value.trim() !== "") {
     //if entered input is different than empty to capture the value
     console.log("Captured Text:", taskReceived);
