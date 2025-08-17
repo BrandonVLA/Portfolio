@@ -74,7 +74,8 @@ li {
     font-size: 1.3rem;
   }
 
-  .center-input-btn, li {
+  .center-input-btn,
+  li {
     flex-direction: column;
     gap: 0.5rem;
     margin: 10px 10px 10px 10px;
@@ -89,8 +90,7 @@ li {
   }
 
   li {
-  background-color: #fff;
-  border-radius: 8px;
+    background-color: #fff;
+    border-radius: 8px;
   }
 }
-
