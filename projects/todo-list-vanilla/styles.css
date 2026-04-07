@@ -17,7 +17,7 @@
 
 body {
   font-family: var(--font-main);
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #1842fa 0%, #16c9cf 100%);
   min-height: 100vh;
   padding: 20px;
 }
@@ -178,7 +178,7 @@ body {
 
 /* Footer */
 .footer {
-  background: #8805d4;
+  background: #018c96;
   color: #fff;
   padding: 2rem 0 1rem 0;
   margin-top: 3rem;
