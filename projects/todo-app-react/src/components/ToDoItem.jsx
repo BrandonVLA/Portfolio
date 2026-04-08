@@ -12,8 +12,8 @@ function ToDoItem({ id, text, completed, onDelete, handleToggle }) {
     >
       <h2>Task: {text}</h2>
       <h3>
-        Is Completed?{" "}
-        {completed ? <BiSolidCheckboxChecked /> : <ImCheckboxUnchecked />}
+        Is Completed? {" "}
+        {completed ? "Yes" : "No"}
       </h3>
       <button onClick={() => onDelete(id)}>Delete</button>
       <input

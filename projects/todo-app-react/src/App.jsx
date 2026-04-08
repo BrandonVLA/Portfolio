@@ -10,7 +10,7 @@ import "./App.css";
 function App() {
   const [taskList, setTaskList] = useState([]);
 
-  const handleToDo = (todo) => {
+  const handleAddToDo = (todo) => {
     const newTask = {
       id: Date.now(),
       text: todo,
@@ -37,7 +37,7 @@ function App() {
         <h1>Your ToDo List</h1>
         <h2>Tasks Total: {taskList.length}</h2>
         <section>
-          <ToDoForm onAddTodo={handleToDo}></ToDoForm>
+          <ToDoForm onAddTodo={handleAddToDo}></ToDoForm>
         </section>
         <section>
           <ToDosList
