@@ -1,11 +1,6 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "./assets/vite.svg";
-import heroImg from "./assets/hero.png";
+import { useState, useEffect } from "react";
 import ToDoForm from "./components/ToDoForm";
-import ToDoItem from "./components/ToDoItem";
 import ToDosList from "./components/TodosList";
-import "./App.css";
 
 function App() {
   const [taskList, setTaskList] = useState([]);
@@ -16,7 +11,8 @@ function App() {
       text: todo,
       completed: false,
     };
-    setTaskList([...taskList, newTask]);
+    const newTaskList = [...taskList, newTask];
+    setTaskList(newTaskList);
   };
 
   const handleToggle = (id) => {
@@ -31,26 +27,48 @@ function App() {
     console.log("Handling deletion:", id);
     setTaskList(taskList.filter((task) => task.id !== id));
   };
+  //Get previous tasks on the session
+  useEffect(() => {
+    const saved = localStorage.getItem("tasks");
+    if (saved && JSON.parse(saved).length > 0) {
+      setTaskList(JSON.parse(saved));
+    }
+  }, []);
+  //Save tasks created on the session
+  useEffect(() => {
+    if (taskList.length > 0 || localStorage.getItem("tasks")) {
+      localStorage.setItem("tasks", JSON.stringify(taskList));
+    }
+  }, [taskList]);
+
   return (
-    <>
-      <section id="center">
-        <h1>Your ToDo List</h1>
-        <h2>Tasks Total: {taskList.length}</h2>
-        <section>
-          <ToDoForm onAddTodo={handleAddToDo}></ToDoForm>
-        </section>
-        <section>
+    <main className="min-h-screen bg-slate-50 px-4 py-8">
+      <div className="mx-auto w-full max-w-3xl rounded-3xl bg-white/95 p-6 shadow-lg shadow-slate-200 ring-1 ring-slate-200">
+        <header className="mb-8 text-center">
+          <p className="text-sm font-medium uppercase tracking-[0.28em] text-slate-500">
+            Simple ToDo App
+          </p>
+          <h1 className="mt-4 text-3xl font-semibold text-slate-900">
+            Your ToDo List
+          </h1>
+          <p className="mt-2 text-sm text-slate-600">
+            Tasks total:{" "}
+            <span className="font-semibold text-slate-900">
+              {taskList.length}
+            </span>
+          </p>
+        </header>
+
+        <div className="space-y-6">
+          <ToDoForm onAddTodo={handleAddToDo} />
           <ToDosList
             taskList={taskList}
             handleDelete={handleDelete}
             handleToggle={handleToggle}
           />
-        </section>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+        </div>
+      </div>
+    </main>
   );
 }
 
