@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import ToDoForm from "./components/ToDoForm";
 import ToDosList from "./components/TodosList";
+import TodoFilters from "./components/TodoFilters";
 
 function App() {
   const [taskList, setTaskList] = useState([]);
-
+  const [filter,setFilter] = useState('all');
   const handleAddToDo = (todo) => {
     const newTask = {
       id: Date.now(),
@@ -41,6 +42,16 @@ function App() {
     }
   }, [taskList]);
 
+  const filteredTasks = taskList.filter(tarea => {
+    if(filter === 'pending') {
+      return tarea.completed === false;
+    }
+    if(filter === 'completed') {
+      return tarea.completed === true;
+    }
+    return true;
+  })
+
   return (
     <main className="min-h-screen bg-slate-50 px-4 py-8">
       <div className="mx-auto w-full max-w-3xl rounded-3xl bg-white/95 p-6 shadow-lg shadow-slate-200 ring-1 ring-slate-200">
@@ -61,8 +72,9 @@ function App() {
 
         <div className="space-y-6">
           <ToDoForm onAddTodo={handleAddToDo} />
+          <TodoFilters filter={filter} onFilterChange={setFilter} filteredTasks={filteredTasks}/>
           <ToDosList
-            taskList={taskList}
+            taskList={filteredTasks}
             handleDelete={handleDelete}
             handleToggle={handleToggle}
           />

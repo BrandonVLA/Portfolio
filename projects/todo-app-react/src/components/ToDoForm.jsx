@@ -24,6 +24,7 @@ function ToDoForm({ onAddTodo }) {
           value={taskText}
           onChange={(e) => setTaskText(e.target.value)}
           className="mt-2 w-full rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition focus:border-slate-500 focus:ring-2 focus:ring-slate-200"
+          placeholder="Enter a new task..."
         />
       </div>
       <button
