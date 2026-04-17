@@ -5,8 +5,8 @@ function TodoFilters({ filter, onFilterChange,filteredTasks }) {
         onClick={() => onFilterChange("all")}
         className={
           filter === "all"
-            ? `bg-blue-500 rounded p-2 m-2 text-white`
-            : `bg-gray-200 rounded p-2 m-2 text-black`
+            ? `bg-blue-500 rounded p-2 m-2 text-white w-auto`
+            : `bg-gray-200 rounded p-2 m-2 text-black w-auto`
         }
       >
         All
@@ -15,8 +15,8 @@ function TodoFilters({ filter, onFilterChange,filteredTasks }) {
         onClick={() => onFilterChange("pending")}
         className={
           filter === "pending"
-            ? `bg-blue-500 rounded p-2 m-2 text-white`
-            : `bg-gray-200 rounded p-2 m-2 text-black`
+            ? `bg-blue-500 rounded p-2 m-2 text-white w-auto`
+            : `bg-gray-200 rounded p-2 m-2 text-black w-auto`
         }
       >
         Pending
@@ -25,8 +25,8 @@ function TodoFilters({ filter, onFilterChange,filteredTasks }) {
         onClick={() => onFilterChange("completed")}
         className={
           filter === "completed"
-            ? `bg-blue-500 rounded p-2 m-2 text-white`
-            : `bg-gray-200 rounded p-2 m-2 text-black`
+            ? `bg-blue-500 rounded p-2 m-2 text-white w-auto`
+            : `bg-gray-200 rounded p-2 m-2 text-black w-auto`
         }
       >
         Completed
