@@ -21,7 +21,7 @@ function TaskDetail({ taskList, onDelete, onEdit, onToggle }) {
     console.log("tasklist cambio,recalculando task", task.text);
   }, [taskList, task]);
   return (
-    <main className="mx-auto w-full max-w-l px-4">
+    <main className="mx-auto w-full max-w-l px-4 ">
       <div className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm transition hover:shadow-md">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-center">
           {task && (
