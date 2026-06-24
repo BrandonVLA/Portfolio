@@ -18,7 +18,10 @@ function TaskDetail({ taskList, onDelete, onEdit, onToggle }) {
   };
 
   useEffect(() => {
-    console.log("tasklist cambio,recalculando task", task.text);
+    console.log(
+      "tasklist cambio,recalculando task",
+      task?.text || "Tarea no encontrada",
+    );
   }, [taskList, task]);
   return (
     <main className="mx-auto w-full max-w-l px-4 ">
