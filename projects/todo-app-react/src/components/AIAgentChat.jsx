@@ -113,7 +113,7 @@ function AIAgentChat({ taskList, actions }) {
           {/* Cabecera */}
           <div className="ai-chat-header">
             <h3>
-              <span></span> Asistente Inteligente
+              <span></span> ToDo Bot
             </h3>
             <button className="ai-chat-close" onClick={() => setIsOpen(false)}>
               ×
