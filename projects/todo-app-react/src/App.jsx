@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import Navbar from "./components/Navbar";
 import NotFound from "./pages/NotFound";
 import TaskDetail from "./pages/TaskDetail";
+import AIAgentChat from "./components/AIAgentChat";
 function App() {
   const [taskList, setTaskList] = useState([]);
   const [filter, setFilter] = useState("all");
@@ -14,13 +15,12 @@ function App() {
       text: todo,
       completed: false,
     };
-    const newTaskList = [...taskList, newTask];
-    setTaskList(newTaskList);
+    setTaskList((prev) => [...prev, newTask]);
   };
 
   const handleToggle = (id) => {
-    setTaskList(
-      taskList.map((task) =>
+    setTaskList((prev) =>
+      prev.map((task) =>
         task.id === id ? { ...task, completed: !task.completed } : task,
       ),
     );
@@ -29,7 +29,7 @@ function App() {
   const handleDelete = (id) => {
     console.log("Handling deletion:", id);
     const numId = Number(id);
-    setTaskList(taskList.filter((task) => task.id !== numId));
+    setTaskList((prev) => prev.filter((task) => task.id !== numId));
   };
   //Get previous tasks on the session
   useEffect(() => {
@@ -56,12 +56,19 @@ function App() {
   });
 
   const handleEditTask = (id, newText) => {
-    console.log('HandleEdittask:',{id,newText});
-    setTaskList(
-      taskList.map((task) =>
+    console.log("HandleEdittask:", { id, newText });
+    setTaskList((prev) =>
+      prev.map((task) =>
         task.id === Number(id) ? { ...task, text: newText } : task,
       ),
     );
+  };
+
+  const actions = {
+    createTask: handleAddToDo,
+    completeTask: handleToggle,
+    deleteTask: handleDelete,
+    editTask: handleEditTask,
   };
 
   return (
@@ -77,6 +84,7 @@ function App() {
               handleAddToDo={handleAddToDo}
               handleDelete={handleDelete}
               handleToggle={handleToggle}
+              handleEdit={handleEditTask}
               filter={filter}
               setFilter={setFilter}
             />
@@ -96,6 +104,7 @@ function App() {
           }
         />
       </Routes>
+      <AIAgentChat taskList={taskList} actions={actions} />
     </>
   );
 }

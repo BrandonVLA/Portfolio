@@ -18,12 +18,12 @@ const todoTools = {
       parameters: {
         type: "OBJECT",
         properties: {
-          texto: {
+          text: {
             type: "STRING",
             description: "El contenido o descripción de la tarea.",
           },
         },
-        required: ["texto"],
+        required: ["text"],
       },
     },
     {
@@ -56,6 +56,25 @@ const todoTools = {
         required: ["id"],
       },
     },
+    {
+      name: "actualizar_tarea",
+      description:
+        "Actualiza, edita o cambia el texto o descripción de una tarea existente usando su ID numérico.",
+      parameters: {
+        type: "OBJECT",
+        properties: {
+          id: {
+            type: "NUMBER",
+            description: "El ID numérico único de la tarea a editar.",
+          },
+          text: {
+            type: "STRING",
+            description: "El nuevo texto, nombre o descripción para la tarea.",
+          },
+        },
+        required: ["id", "text"],
+      },
+    },
   ],
 };
 
@@ -68,7 +87,7 @@ export const askAgent = async (message, chatHistory, currentTasks, actions) => {
 
   try {
     const model = genAI.getGenerativeModel({
-      model: "gemini-1.5-flash",
+      model: "gemini-2.5-flash",
       systemInstruction: `Eres un asistente de productividad inteligente integrado en una aplicación de tareas.
 Tu objetivo es ayudar al usuario a gestionar sus pendientes.
 Reglas:
@@ -79,11 +98,27 @@ Reglas:
       tools: [todoTools],
     });
 
-    const formattedHistory = chatHistory.map((msg) => ({
+    // 1. Excluimos el último mensaje del historial (se enviará en sendMessage)
+    const previousHistory = chatHistory.slice(0, -1);
+
+    // 2. Buscamos el índice del primer mensaje real del usuario
+    const firstUserMessageIndex = previousHistory.findIndex(
+      (msg) => msg.sender === "user",
+    );
+
+    // 3. Cortamos el historial para que empiece desde ese primer mensaje del usuario
+    const cleanHistory =
+      firstUserMessageIndex !== -1
+        ? previousHistory.slice(firstUserMessageIndex)
+        : [];
+
+    // 4. Formateamos el historial limpio para Gemini
+    const formattedHistory = cleanHistory.map((msg) => ({
       role: msg.sender === "user" ? "user" : "model",
       parts: [{ text: msg.text }],
     }));
 
+    // 5. Iniciamos el chat con el historial corregido
     const chat = model.startChat({
       history: formattedHistory,
     });
@@ -92,7 +127,11 @@ Reglas:
     let result = await chat.sendMessage(message);
     let responseText = "";
 
-    const functionCalls = result.response.functionCalls;
+    const functionCalls =
+      typeof result.response.functionCalls === "function"
+        ? result.response.functionCalls()
+        : result.response.functionCalls;
+    console.log("Llamadas a funciones detectadas por Gemini:", functionCalls);
 
     // Si la IA decide ejecutar una herramienta
     if (functionCalls && functionCalls.length > 0) {
@@ -100,15 +139,21 @@ Reglas:
       const { name, args } = call;
       let toolResult = null;
 
+      console.log(
+        `Intentando ejecutar herramienta local: ${name} con argumentos:`,
+        args,
+      );
+
       try {
         if (name === "crear_tarea") {
-          if (!args.texto || typeof args.texto !== "string") {
+          if (!args.text || typeof args.text !== "string") {
             throw new Error("El texto de la tarea no es válido.");
           }
-          actions.crearTarea(args.texto);
+          console.log("Llamando a actions.createTask con:", args.text);
+          actions.createTask(args.text);
           toolResult = {
             status: "success",
-            message: `Tarea '${args.texto}' agregada.`,
+            message: `Tarea '${args.text}' agregada.`,
           };
         } else if (name === "completar_tarea") {
           const taskId = Number(args.id);
@@ -117,7 +162,8 @@ Reglas:
               "El ID de la tarea proporcionado por el agente no es un número válido.",
             );
           }
-          actions.completarTarea(taskId);
+          console.log("Llamando a actions.completeTask con ID:", taskId);
+          actions.completeTask(taskId);
           toolResult = {
             status: "success",
             message: `Tarea ID ${taskId} actualizada.`,
@@ -129,12 +175,34 @@ Reglas:
               "El ID de la tarea proporcionado por el agente no es un número válido.",
             );
           }
-          actions.eliminarTarea(taskId);
+          console.log("Llamando a actions.deleteTask con ID:", taskId);
+          actions.deleteTask(taskId);
           toolResult = {
             status: "success",
             message: `Tarea ID ${taskId} eliminada.`,
           };
+        } else if (name === "actualizar_tarea") {
+          const taskId = Number(args.id);
+          if (isNaN(taskId)) {
+            throw new Error(
+              "El ID de la tarea proporcionado por el agente no es un número válido.",
+            );
+          }
+          if (!args.text || typeof args.text !== "string") {
+            throw new Error("El nuevo texto de la tarea no es válido.");
+          }
+          console.log("Llamando a actions.editTask con ID:", taskId, "y texto:", args.text);
+          actions.editTask(taskId, args.text);
+          toolResult = {
+            status: "success",
+            message: `Tarea ID ${taskId} actualizada con el texto '${args.text}'.`,
+          };
         }
+
+        console.log(
+          "Informando a Gemini del resultado de la herramienta:",
+          toolResult,
+        );
 
         // Informar a Gemini de la ejecución exitosa
         const followUp = await chat.sendMessage([
@@ -172,7 +240,7 @@ export const getInitialGreeting = async (currentTasks) => {
 
   try {
     const model = genAI.getGenerativeModel({
-      model: "gemini-1.5-flash",
+      model: "gemini-2.5-flash",
     });
 
     const pendingTasks = currentTasks.filter((t) => !t.completed);

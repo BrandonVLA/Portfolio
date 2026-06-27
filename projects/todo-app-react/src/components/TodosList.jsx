@@ -1,6 +1,6 @@
 import ToDoItem from "./ToDoItem";
 
-function ToDosList({ taskList, handleToggle, handleDelete }) {
+function ToDosList({ taskList, handleToggle, handleDelete, handleEdit }) {
   return (
     <section className="space-y-4">
       <div className="flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600">
@@ -17,6 +17,7 @@ function ToDosList({ taskList, handleToggle, handleDelete }) {
           completed={task.completed}
           onDelete={handleDelete}
           handleToggle={handleToggle}
+          onEdit={handleEdit}
         />
       ))}
     </section>
