@@ -1,21 +1,27 @@
 import { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { editTask, deleteTask } from "../store/slices/todoSlice";
 
-function TaskDetail({ taskList, onDelete, onEdit }) {
+function TaskDetail() {
   const { id } = useParams();
-  const task = taskList.find((t) => t.id === Number(id));
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const taskList = useSelector((state) => state.todos.tasks);
+  const task = taskList.find((t) => t.id === Number(id));
+
   const [isEditing, setIsEditing] = useState(false);
   const [newText, setNewText] = useState("");
 
   const handleDeleteDetails = () => {
-    onDelete(id);
+    dispatch(deleteTask(id));
     navigate("/");
   };
 
   const handleSaveEdit = () => {
     if (newText.trim() === "") return;
-    onEdit(id, newText);
+    dispatch(editTask({ id, text: newText }));
     setIsEditing(false);
   };
 
@@ -29,12 +35,29 @@ function TaskDetail({ taskList, onDelete, onEdit }) {
     return (
       <main className="min-h-screen bg-slate-50/50 dark:bg-slate-950/20 px-4 py-16 flex items-center justify-center">
         <div className="text-center rounded-3xl border border-slate-200/50 bg-white p-8 max-w-sm shadow-lg dark:border-slate-800/50 dark:bg-slate-950">
-          <svg className="w-12 h-12 text-slate-350 dark:text-slate-650 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          <svg
+            className="w-12 h-12 text-slate-350 dark:text-slate-650 mx-auto mb-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
           </svg>
-          <h2 className="text-lg font-bold text-slate-850 dark:text-slate-250 mb-2">Task not found</h2>
-          <p className="text-sm text-slate-500 dark:text-slate-450 mb-6">The task you are looking for might have been deleted.</p>
-          <Link to="/" className="inline-flex rounded-2xl bg-violet-600 hover:bg-violet-500 px-6 py-2.5 text-sm font-semibold text-white shadow-md shadow-violet-500/10 transition-all">
+          <h2 className="text-lg font-bold text-slate-850 dark:text-slate-250 mb-2">
+            Task not found
+          </h2>
+          <p className="text-sm text-slate-500 dark:text-slate-450 mb-6">
+            The task you are looking for might have been deleted.
+          </p>
+          <Link
+            to="/"
+            className="inline-flex rounded-2xl bg-violet-600 hover:bg-violet-500 px-6 py-2.5 text-sm font-semibold text-white shadow-md shadow-violet-500/10 transition-all"
+          >
             Return to Dashboard
           </Link>
         </div>
@@ -54,11 +77,13 @@ function TaskDetail({ taskList, onDelete, onEdit }) {
               {task.text}
             </h2>
             <div className="mt-4 flex items-center gap-2">
-              <span className="text-xs text-slate-400 dark:text-slate-500">Status:</span>
+              <span className="text-xs text-slate-400 dark:text-slate-500">
+                Status:
+              </span>
               <span
                 className={`inline-flex items-center rounded-full px-3 py-0.5 text-xs font-semibold select-none ${
-                  task.completed 
-                    ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-950/20 dark:text-emerald-400" 
+                  task.completed
+                    ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-950/20 dark:text-emerald-400"
                     : "bg-amber-50 text-amber-700 dark:bg-amber-950/20 dark:text-amber-400"
                 }`}
               >
@@ -101,7 +126,9 @@ function TaskDetail({ taskList, onDelete, onEdit }) {
         {isEditing && (
           <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
             <div className="w-full max-w-sm rounded-3xl border border-slate-200/50 bg-white p-6 shadow-2xl dark:border-slate-800/50 dark:bg-slate-950 animation-in fade-in zoom-in-95 duration-200">
-              <h3 className="text-base font-bold text-slate-900 dark:text-white mb-3">Edit Task</h3>
+              <h3 className="text-base font-bold text-slate-900 dark:text-white mb-3">
+                Edit Task
+              </h3>
               <input
                 type="text"
                 className="w-full rounded-2xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm text-slate-900 outline-none focus:border-violet-500 focus:ring-4 focus:ring-violet-100 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-violet-400 dark:focus:ring-violet-950/40"

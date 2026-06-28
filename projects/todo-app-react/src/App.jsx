@@ -6,105 +6,47 @@ import Navbar from "./components/Navbar";
 import NotFound from "./pages/NotFound";
 import TaskDetail from "./pages/TaskDetail";
 import AIAgentChat from "./components/AIAgentChat";
+import { useDispatch, useSelector } from "react-redux";
+import { setTasks } from "./store/slices/todoSlice";
+
 function App() {
-  const [taskList, setTaskList] = useState([]);
-  const [filter, setFilter] = useState("all");
-  const handleAddToDo = (todo) => {
-    const newTask = {
-      id: Date.now(),
-      text: todo,
-      completed: false,
-    };
-    setTaskList((prev) => [...prev, newTask]);
-  };
+  const taskList = useSelector((state) => state.todos.tasks);
+  const dispatch = useDispatch();
 
-  const handleToggle = (id) => {
-    setTaskList((prev) =>
-      prev.map((task) =>
-        task.id === id ? { ...task, completed: !task.completed } : task,
-      ),
-    );
-  };
-
-  const handleDelete = (id) => {
-    console.log("Handling deletion:", id);
-    const numId = Number(id);
-    setTaskList((prev) => prev.filter((task) => task.id !== numId));
-  };
   //Get previous tasks on the session
   useEffect(() => {
     const saved = localStorage.getItem("tasks");
-    if (saved && JSON.parse(saved).length > 0) {
-      setTaskList(JSON.parse(saved));
+
+    if (saved) {
+      try {
+        const parsedTasks = JSON.parse(saved);
+        if (parsedTasks.length > 0) {
+          dispatch(setTasks(parsedTasks));
+        }
+      } catch (error) {
+        console.log(
+          `Error while parsing tasks from localStorage.Error: `,
+          error,
+        );
+      }
     }
-  }, []);
+  }, [dispatch]);
+
   //Save tasks created on the session
   useEffect(() => {
-    if (taskList.length > 0 || localStorage.getItem("tasks")) {
-      localStorage.setItem("tasks", JSON.stringify(taskList));
-    }
+    localStorage.setItem("tasks", JSON.stringify(taskList));
   }, [taskList]);
-
-  const filteredTasks = taskList.filter((tarea) => {
-    if (filter === "pending") {
-      return tarea.completed === false;
-    }
-    if (filter === "completed") {
-      return tarea.completed === true;
-    }
-    return true;
-  });
-
-  const handleEditTask = (id, newText) => {
-    console.log("HandleEdittask:", { id, newText });
-    setTaskList((prev) =>
-      prev.map((task) =>
-        task.id === Number(id) ? { ...task, text: newText } : task,
-      ),
-    );
-  };
-
-  const actions = {
-    createTask: handleAddToDo,
-    completeTask: handleToggle,
-    deleteTask: handleDelete,
-    editTask: handleEditTask,
-  };
 
   return (
     <>
       <Navbar />
       <Routes>
-        <Route
-          path="/"
-          element={
-            <Home
-              taskList={taskList}
-              filteredTasks={filteredTasks}
-              handleAddToDo={handleAddToDo}
-              handleDelete={handleDelete}
-              handleToggle={handleToggle}
-              handleEdit={handleEditTask}
-              filter={filter}
-              setFilter={setFilter}
-            />
-          }
-        />
+        <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="*" element={<NotFound />} />
-        <Route
-          path="/task/:id"
-          element={
-            <TaskDetail
-              taskList={taskList}
-              onDelete={handleDelete}
-              onEdit={handleEditTask}
-              onToggle={handleToggle}
-            />
-          }
-        />
+        <Route path="/task/:id" element={<TaskDetail />} />
       </Routes>
-      <AIAgentChat taskList={taskList} actions={actions} />
+      <AIAgentChat taskList={taskList} />
     </>
   );
 }
