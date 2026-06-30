@@ -1,18 +1,23 @@
 import { useState, useEffect } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { setTasks } from "./store/slices/todoSlice";
+
 import About from "./pages/About";
 import Home from "./pages/Home";
 import Navbar from "./components/Navbar";
 import NotFound from "./pages/NotFound";
 import TaskDetail from "./pages/TaskDetail";
 import AIAgentChat from "./components/AIAgentChat";
-import { useDispatch, useSelector } from "react-redux";
-import { setTasks } from "./store/slices/todoSlice";
+import Login from "./pages/Login";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   const taskList = useSelector((state) => state.todos.tasks);
-  const dispatch = useDispatch();
 
+  //isAuthenticated?
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const dispatch = useDispatch();
   //Get previous tasks on the session
   useEffect(() => {
     const saved = localStorage.getItem("tasks");
@@ -41,12 +46,30 @@ function App() {
     <>
       <Navbar />
       <Routes>
-        <Route path="/" element={<Home />} />
+        {/*Private Routes*/}
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/task/:id"
+          element={
+            <ProtectedRoute>
+              <TaskDetail />
+            </ProtectedRoute>
+          }
+        />
+        {/*Public Routes*/}
+        <Route path="/login" element={<Login />} />
         <Route path="/about" element={<About />} />
         <Route path="*" element={<NotFound />} />
-        <Route path="/task/:id" element={<TaskDetail />} />
       </Routes>
-      <AIAgentChat taskList={taskList} />
+      {/* AI Agent will show only if user is authenticated */}
+      {isAuthenticated && <AIAgentChat taskList={taskList} />}
     </>
   );
 }

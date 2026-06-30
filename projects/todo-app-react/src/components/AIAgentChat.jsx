@@ -1,8 +1,15 @@
 import { useState, useEffect, useRef } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  addTask,
+  deleteTask,
+  toggleTask,
+  editTask,
+} from "../store/slices/todoSlice";
 import { askAgent, getInitialGreeting } from "../services/gemini";
 import "./AIAgentChat.css";
 
-function AIAgentChat({ taskList, actions }) {
+function AIAgentChat() {
   const [messages, setMessages] = useState([]);
   const [aiInputToSend, setAiInputToSend] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -10,6 +17,17 @@ function AIAgentChat({ taskList, actions }) {
   const [isOpen, setIsOpen] = useState(false);
   const messagesEndRef = useRef(null);
   const suggestionsRef = useRef(null);
+
+  const dispatch = useDispatch();
+  //get the taskList
+  const taskList = useSelector((state) => state.todos.tasks);
+
+  const actions = {
+    createTask: (text) => dispatch(addTask(text)),
+    completeTask: (id) => dispatch(toggleTask(id)),
+    deleteTask: (id) => dispatch(deleteTask(id)),
+    editTask: (id, text) => dispatch(editTask({ id, text })),
+  };
 
   //Greeting Effect
   useEffect(() => {
@@ -53,7 +71,7 @@ function AIAgentChat({ taskList, actions }) {
     setIsLoading(true);
 
     try {
-      const aiReponse = await askAgent(
+      const aiResponse = await askAgent(
         messageText,
         updatedMessages,
         taskList,
@@ -64,7 +82,7 @@ function AIAgentChat({ taskList, actions }) {
         {
           id: Date.now(),
           sender: "agent",
-          text: aiReponse,
+          text: aiResponse,
         },
       ]);
     } catch (error) {
@@ -74,7 +92,7 @@ function AIAgentChat({ taskList, actions }) {
         {
           id: Date.now(),
           sender: "agent",
-          text: "Lo siento, no pude conectar con el agente en este momento. Intenta de nuevo más tarde.",
+          text: "Lo siento, no pude conectar con el agente en este momento.Intente de nuevo mas tarde.",
         },
       ]);
     } finally {
