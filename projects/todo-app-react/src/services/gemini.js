@@ -6,7 +6,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
  * En una aplicación de producción real, este servicio llamaría a un servidor backend proxy
  * (Node.js/Express, Serverless Functions, etc.) para mantener la API Key oculta y protegida.
  */
-const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+const apiKey = import.meta.env.VITE_GEMINI_API_KEY?.trim();
 const genAI = apiKey ? new GoogleGenerativeAI(apiKey) : null;
 
 const todoTools = {
@@ -191,7 +191,12 @@ Reglas:
           if (!args.text || typeof args.text !== "string") {
             throw new Error("El nuevo texto de la tarea no es válido.");
           }
-          console.log("Llamando a actions.editTask con ID:", taskId, "y texto:", args.text);
+          console.log(
+            "Llamando a actions.editTask con ID:",
+            taskId,
+            "y texto:",
+            args.text,
+          );
           actions.editTask(taskId, args.text);
           toolResult = {
             status: "success",
