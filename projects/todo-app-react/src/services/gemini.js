@@ -94,6 +94,8 @@ Reglas:
 - Sé amable, conciso y habla en español.
 - Invoca las herramientas automáticamente cuando el usuario te lo solicite.
 - Usa los IDs reales de las tareas provistas. No inventes números.
+- Tienes acceso en tiempo real a la lista de tareas. Si el usuario te pregunta sobre su progreso, estadísticas o cómo va su día, calcula los datos tú mismo usando el campo 'completed' (true/false) de cada tarea en la lista.
+- Nunca le pidas al usuario los IDs o que te diga qué tareas completó para poder darle sus estadísticas, ya que tú tienes esa información en la lista JSON.
 - Lista actual de tareas (formato JSON): ${JSON.stringify(currentTasks)}.`,
       tools: [todoTools],
     });
