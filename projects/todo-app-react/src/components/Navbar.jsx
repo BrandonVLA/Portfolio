@@ -12,18 +12,18 @@ function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 w-full px-4 py-4 backdrop-blur-md bg-transparent">
-      <nav className="mx-auto max-w-2xl rounded-full border border-slate-200/80 bg-white/75 p-2 shadow-sm shadow-slate-100/50 backdrop-blur-xl dark:border-slate-800/80 dark:bg-slate-950/75 dark:shadow-none flex items-center justify-between px-6">
-        <Link to="/" className="flex items-center gap-2 group">
-          <span className="text-xl font-bold bg-gradient-to-r from-violet-600 to-indigo-600 dark:from-violet-400 dark:to-indigo-400 bg-clip-text text-transparent group-hover:opacity-85 transition-opacity">
+      <nav className="mx-auto max-w-2xl rounded-full border border-slate-200/80 bg-white/75 p-2 shadow-sm shadow-slate-100/50 backdrop-blur-xl dark:border-slate-800/80 dark:bg-slate-950/75 dark:shadow-none flex items-center justify-between px-3 sm:px-6">
+        <Link to="/" className="flex items-center gap-2 group flex-shrink-0">
+          <span className="text-base sm:text-xl font-bold bg-gradient-to-r from-violet-600 to-indigo-600 dark:from-violet-400 dark:to-indigo-400 bg-clip-text text-transparent group-hover:opacity-85 transition-opacity">
             SmartToDo
           </span>
         </Link>
 
         {isAuthenticated ? (
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1 sm:gap-1.5">
             <Link
               to="/"
-              className={`rounded-full px-4 py-1.5 text-sm font-medium transition-all duration-250 ${
+              className={`rounded-full px-2.5 py-1 sm:px-4 sm:py-1.5 text-xs sm:text-sm font-medium transition-all duration-250 ${
                 isActive("/")
                   ? "bg-violet-600 text-white shadow-sm shadow-violet-500/25 dark:bg-violet-500"
                   : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-900 dark:hover:text-slate-200"
@@ -33,7 +33,7 @@ function Navbar() {
             </Link>
             <Link
               to="/about"
-              className={`rounded-full px-4 py-1.5 text-sm font-medium transition-all duration-250 ${
+              className={`rounded-full px-2.5 py-1 sm:px-4 sm:py-1.5 text-xs sm:text-sm font-medium transition-all duration-250 ${
                 isActive("/about")
                   ? "bg-violet-600 text-white shadow-sm shadow-violet-500/25 dark:bg-violet-500"
                   : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-900 dark:hover:text-slate-200"
@@ -42,20 +42,20 @@ function Navbar() {
               About
             </Link>
 
-            <div className="flex items-center gap-2.5 border-l border-slate-200/60 dark:border-slate-800/60 pl-2.5">
-              <div className="flex items-center gap-2 bg-slate-50 dark:bg-slate-900 px-3 py-1 rounded-full border border-slate-150/40 dark:border-slate-800/40">
+            <div className="flex items-center gap-1 sm:gap-2.5 border-l border-slate-200/60 dark:border-slate-800/60 pl-1.5 sm:pl-2.5">
+              <div className="flex items-center gap-1 sm:gap-2 bg-slate-50 dark:bg-slate-900 px-2 py-0.5 sm:px-3 sm:py-1 rounded-full border border-slate-150/40 dark:border-slate-800/40">
                 {/* Círculo con la inicial del usuario */}
-                <div className="w-5 h-5 rounded-full bg-violet-600 dark:bg-violet-500 text-white text-[10px] font-bold flex items-center justify-center uppercase select-none">
+                <div className="w-5 h-5 rounded-full bg-violet-600 dark:bg-violet-500 text-white text-[10px] font-bold flex items-center justify-center uppercase select-none flex-shrink-0">
                   {user?.username?.charAt(0) || "U"}
                 </div>
                 {/* Nombre de usuario */}
-                <span className="text-xs font-semibold text-slate-700 dark:text-slate-350 max-w-[80px] truncate">
+                <span className="hidden sm:inline text-xs font-semibold text-slate-700 dark:text-slate-350 max-w-[80px] truncate">
                   {user?.username}
                 </span>
               </div>
               <button
                 onClick={() => dispatch(logout())}
-                className="rounded-full bg-red-50 text-red-650 hover:bg-red-100 dark:bg-red-950/20 dark:text-red-400 dark:hover:bg-red-950/40 px-3.5 py-1.5 text-xs font-bold transition-all cursor-pointer"
+                className="rounded-full bg-red-50 text-red-650 hover:bg-red-100 dark:bg-red-950/20 dark:text-red-400 dark:hover:bg-red-950/40 px-2.5 py-1 sm:px-3.5 sm:py-1.5 text-xs font-bold transition-all cursor-pointer flex-shrink-0"
               >
                 Logout
               </button>
