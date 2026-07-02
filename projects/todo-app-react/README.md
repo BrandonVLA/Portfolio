@@ -11,55 +11,69 @@
 
 ---
 
-## 🌟 Demo en Vivo
+## 🌟 Live Demo
 
-Puedes probar la aplicación en producción aquí:  
+Check out the production app here:  
 👉 **[todo-app-ai-silk.vercel.app](https://todo-app-ai-silk.vercel.app/)**
 
 ---
 
-## 📝 Descripción del Proyecto
+## 📝 Project Overview
 
-Esta no es una aplicación de tareas convencional. Es una **Smart ToDo App** que integra un **agente conversacional inteligente (ToDo Bot)** impulsado por la API de **Gemini 2.5 Flash**.
+This is not just another standard task-tracker app. It is a **Smart ToDo App** featuring a built-in **conversational AI agent (ToDo Bot)** powered by the **Gemini 2.5 Flash** API.
 
-El bot es capaz de comprender el lenguaje natural del usuario y realizar acciones en tiempo real (crear, completar, editar y borrar tareas) manipulando directamente el estado global de la aplicación gestionado con **Redux Toolkit**.
-
----
-
-## 🚀 Características Clave
-
-- **Asistente Virtual con IA (ToDo Bot):** Charla con el bot para organizar tu día, pídele consejos de productividad o pídele que gestione tus tareas por ti.
-- **Function Calling / Tool Use:** La IA invoca herramientas locales de código automáticamente para modificar la lista de pendientes del usuario según la intención del mensaje.
-- **Barra de Progreso Dinámica:** Visualiza en tiempo real el porcentaje de tareas completadas.
-- **Sugerencias Rápidas:** Carrusel interactivo de preguntas y comandos de ejemplo para guiar al usuario.
-- **Diseño Moderno e Interactivo:** Estilizado con Tailwind CSS v4, fuentes elegantes y transiciones suaves (Dark/Light mode adaptativo).
+The bot understands natural language input and performs real-time actions (creating, completing, editing, and deleting tasks) by directly interacting with the global application state managed by **Redux Toolkit**.
 
 ---
 
-## 🛠️ Stack Tecnológico
+## 🚀 Key Features
+
+- **AI Productivity Assistant (ToDo Bot):** Chat with the bot to plan your day, get quick productivity advice, or ask it to manage your tasks on your behalf.
+- **Function Calling / Tool Use:** The AI automatically triggers local JavaScript functions to modify the task list in real-time based on the user's conversational intent.
+- **Dynamic Progress Tracker:** Displays the percentage of completed tasks in real-time.
+- **Quick Suggestions:** Interactive suggestion chip carousel to guide users with quick command examples.
+- **Modern Responsive UI:** Designed with Tailwind CSS v4, custom typography (`Outfit` font), and smooth animations with adaptive Dark/Light mode.
+
+---
+
+## 🛠️ Tech Stack
 
 - **Frontend:** React 19, JavaScript (ES6+), React Router v7.
-- **Gestión de Estado:** Redux Toolkit (Slices, Selectors, Actions).
-- **Estilos:** Tailwind CSS v4, React Icons.
-- **Inteligencia Artificial:** SDK oficial de `@google/generative-ai` (Gemini 2.5 Flash).
-- **Herramienta de Construcción:** Vite.
-- **Despliegue:** Vercel (con redirección SPA configurada en `vercel.json`).
+- **State Management:** Redux Toolkit (Slices, Selectors, Actions).
+- **Styling:** Tailwind CSS v4, React Icons.
+- **Artificial Intelligence:** Official `@google/generative-ai` SDK (Gemini 2.5 Flash).
+- **Build Tool:** Vite.
+- **Deployment:** Vercel (configured for SPA client-side routing via `vercel.json`).
 
 ---
 
-## 🔒 Nota de Seguridad y Arquitectura
+## 🔒 Security & Architecture Note
 
 > [!NOTE]
-> Para propósitos de este **demo frontend/portafolio**, la API Key de Gemini se configura y consume desde las variables de entorno del cliente (`import.meta.env.VITE_GEMINI_API_KEY`) y se protege a nivel de código mediante el archivo `.gitignore`.
+> For the purposes of this **frontend demo/portfolio**, the Gemini API Key is configured and loaded on the client side (`import.meta.env.VITE_GEMINI_API_KEY`) and is hidden from public git history via `.gitignore`.
 >
-> En un entorno de **producción real**, estas llamadas se realizarían a través de un **servidor Backend Proxy** (Node.js/Express o Serverless Functions) para mantener la API Key completamente oculta y protegida de la vista del usuario en el navegador.
+> In a **real production environment**, these API calls would be proxied through a **secure Backend Server** (Node.js/Express or Serverless Functions) to keep the API Key completely hidden and protected from the user's browser.
 
 ---
 
-## 💻 Instalación y Configuración Local
+## 💻 Local Installation & Setup
 
-1. **Clona el repositorio** e ingresa a la carpeta del proyecto:
+1. **Clone the repository** and navigate to the project directory:
+
    ```bash
-   git clone <url-de-tu-repositorio>
+   git clone <your-repository-url>
    cd projects/todo-app-react
+
    ```
+
+2. ** Install dependencies:**
+   pnpm install
+
+3. ** Create a .env file in the root directory**
+   Create a .env file in the root directory and add the following:
+   VITE_GEMINI_API_KEY=your_secret_api_key_here
+
+4. ** Run the application:**
+   pnpm dev
+
+**The app will open locally at** http://localhost:5173
